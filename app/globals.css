@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* If you don't want Tailwind, just keep this */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
