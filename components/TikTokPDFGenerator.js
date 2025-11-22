@@ -21,13 +21,39 @@ export default function TikTokPDFGenerator() {
     setLoading(false)
   }
 
-  const downloadMP3 = () => {
-    if (!data?.music?.playUrl) return
+const downloadMP3 = () => {
+  if (!data?.music?.playUrl) return
+
+  const url = data.music.playUrl
+  const filename = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
+
+  if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
+    fetch(url)
+      .then(res => res.blob())
+      .then(blob => {
+        const blobUrl = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = blobUrl
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(blobUrl)
+      })
+      .catch(() => {
+        const a = document.createElement('a')
+        a.href = url + '?download=1'
+        a.target = '_blank'
+        a.download = filename
+        a.click()
+      })
+  } else {
     const a = document.createElement('a')
-    a.href = data.music.playUrl
-    a.download = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
+    a.href = url
+    a.download = filename
     a.click()
   }
+}
 
   const generatePDF = async () => {
     if (!data) return
