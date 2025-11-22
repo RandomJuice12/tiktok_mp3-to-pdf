@@ -25,7 +25,7 @@ export default function TikTokPDFGenerator() {
     if (!data?.music?.playUrl) return
     const a = document.createElement('a')
     a.href = data.music.playUrl
-    a.download = `${data.music.title || 'tiktok-sound'}.mp3`
+    a.download = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
     a.click()
   }
 
@@ -37,7 +37,7 @@ export default function TikTokPDFGenerator() {
 
     pdf.setFontSize(28)
     pdf.text('TikTok Sound', pageWidth / 2, y, { align: 'center' })
-    y += 25
+    y += 30
 
     pdf.setFontSize(18)
     pdf.text(data.music.title || 'Unknown Sound', 20, y)
@@ -55,37 +55,74 @@ export default function TikTokPDFGenerator() {
       pdf.text(lines, 20, y)
     }
 
-    pdf.save(`${data.music.title?.slice(0, 40) || 'tiktok'}.pdf`)
+    pdf.save(`${data.music.title?.slice(0, 40) || 'tiktok'}-sound.pdf`)
   }
 
   return (
-    <div style Iadd the MP3 download button here ↓
-      <div style={{ background: 'white', borderRadius: '16px', padding: '40px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
-        {/* input & generate button same as before */}
-        <input /* ... same as before ... */ />
-        <button onClick={fetchData} disabled={loading} /* ... same ... */>
-          {loading ? 'Loading...' : 'Generate PDF'}
-        </button>
+    <div style={{ background: 'white', borderRadius: '16px', padding: '40px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)', maxWidth: '600px', margin: '0 auto' }}>
+      <input
+        type="text"
+        placeholder="Paste TikTok video link here..."
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && fetchData()}
+        style={{ width: '100%', padding: '16px', fontSize: '18px', border: '3px solid #d8b4fe', borderRadius: '12px', outline: 'none' }}
+      />
 
-        {data && (
-          <div style={{ marginTop: '40px', textAlign: 'center' }}>
-            <h3 style={{ fontSize: '28px', fontWeight: 'bold' }}>{data.music.title || 'Original Sound'}</h3>
-            <p style={{ color: '#666', margin: '8px 0' }}>by {data.music.author || 'TikTok'}</p>
+      <button
+        onClick={fetchData}
+        disabled={loading}
+        style={{ marginTop: '20px', width: '100%', padding: '18px', background: 'linear-gradient(to right, #a855f7, #ec4899)', color: 'white', fontSize: '22px', fontWeight: 'bold', border: 'none', borderRadius: '12px', cursor: 'pointer' }}
+      >
+        {loading ? 'Loading...' : 'Get Sound Info'}
+      </button>
 
-            {/* NEW: MP3 Download Button */}
-            <button 
-              onClick={downloadMP3}
-              style={{ margin: '12px', padding: '14px 32px', background: '#ef4444', color: 'white', fontSize: '18px', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
-              Download MP3
-            </button>
+      {data && (
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
+          <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
+            {data.music.title || 'Original Sound'}
+          </h3>
+          <p style={{ color: '#666', margin: '0 0 30px 0' }}>
+            by {data.music.author || 'TikTok'}
+          </p>
 
-            {/* Existing PDF button */}
-            <button onClick={generatePDF} style={{ margin: '12px', padding: '14px 32px', background: '#10b981', color: 'white', fontSize: '18px', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
-              Download PDF + QR Code
-            </button>
-          </div>
-        )}
-      </div>
+          {/* MP3 DOWNLOAD BUTTON */}
+          <button
+            onClick={downloadMP3}
+            style={{ 
+              padding: '16px 40px', 
+              background: '#ef4444', 
+              color: 'white', 
+              fontSize: '20px', 
+              fontWeight: 'bold',
+              border: 'none', 
+              borderRadius: '50px', 
+              cursor: 'pointer',
+              margin: '0 10px'
+            }}
+          >
+            Download MP3
+          </button>
+
+          {/* PDF DOWNLOAD BUTTON */}
+          <button
+            onClick={generatePDF}
+            style={{ 
+              padding: '16px 40px', 
+              background: '#10b981', 
+              color: 'white', 
+              fontSize: '20px', 
+              fontWeight: 'bold',
+              border: 'none', 
+              borderRadius: '50px', 
+              cursor: 'pointer',
+              margin: '0 10px'
+            }}
+          >
+            Download PDF + QR
+          </button>
+        </div>
+      )}
     </div>
   )
 }
