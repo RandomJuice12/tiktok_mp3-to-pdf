@@ -2,13 +2,14 @@ import TikTokPDFGenerator from '../components/TikTokPDFGenerator'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-600 to-pink-600 p-4">
-      <div className="max-w-4xl mx-auto pt-12">
-        <h1 className="text-5xl font-bold text-white text-center mb-4">
-          TikTok Sound → PDF
+    <main style={{ minHeight: '100vh', background: 'linear-gradient(to bottom right, #a855f7, #ec4899)', padding: '16px' }}>
+      <div style={{ maxWidth: '1024px', margin: '48px auto', paddingTop: '40px' }}>
+        <h1 style={{ fontSize: '3.5rem', fontWeight: 'bold', color: 'white', textAlign: 'center', marginBottom: '16px' }}>
+          TikTok Sound → MP3 + PDF
         </h1>
-        <p className="text-xl text-white text-center mb-12 opacity-90">
-          Paste any TikTok link → Get lyrics + QR code to the audio in a beautiful PDF
+        <p style={{ fontSize: '1.5rem', color: 'white', textAlign: 'center', opacity: 0.95, marginBottom: '48px', lineHeight: '1.5' }}>
+          Paste any TikTok link → Get MP3 download <br />
+          or QR code to the audio in a beautiful PDF
         </p>
         <TikTokPDFGenerator />
       </div>
