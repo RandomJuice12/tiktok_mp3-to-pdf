@@ -56,31 +56,35 @@ export default function TikTokPDFGenerator() {
   }
 
   // NEW: MP4 DOWNLOAD FUNCTION
-  const downloadMP4 = async () => {
-    const videoUrl = data?.play || data?.video?.playUrl || data?.hdplay
-    if (!videoUrl) {
-      alert('No video available for this TikTok')
-      return
-    }
-    const filename = `${data.music?.title?.slice(0, 40) || 'tiktok'}-video.mp4`
-    try {
-      const res = await fetch('/api/tiktok', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playUrl: videoUrl })
-      })
-      if (!res.ok) throw new Error()
-      const blob = await res.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = filename
-      a.click()
-      window.URL.revokeObjectURL(url)
-    } catch (err) {
-      alert('MP4 download failed — try Chrome')
-    }
+const downloadMP4 = async () => {
+  // ←←← CORRECT way to get the video URL from tikwm.com API
+  const videoUrl = data?.data?.play || data?.play
+  if (!videoUrl) {
+    alert('No video available for this TikTok (maybe it’s audio-only or private)')
+    return
   }
+
+  const filename = `${data.music?.title?.slice(0, 40) || 'tiktok'}-video.mp4`
+
+  try {
+    const res = await fetch('/api/tiktok', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playUrl: videoUrl })
+    })
+    if (!res.ok) throw new Error()
+
+    const blob = await res.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    window.URL.revokeObjectURL(url)
+  } catch (err) {
+    alert('MP4 download failed — try again or use Chrome')
+  }
+}
 
   const generatePDF = async () => {
     if (!data) return
