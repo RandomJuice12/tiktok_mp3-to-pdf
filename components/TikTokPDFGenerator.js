@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { jsPDF } from 'jspdf'
 import QRCode from 'qrcode'
 
@@ -8,6 +8,7 @@ export default function TikTokPDFGenerator() {
   const [url, setUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
+  const audioRef = useRef(null)
 
   const fetchData = async () => {
     setLoading(true)
@@ -21,10 +22,8 @@ export default function TikTokPDFGenerator() {
     setLoading(false)
   }
 
-  // FIXED MP3 DOWNLOAD — works perfectly on iPhone Safari + Android + Desktop
   const downloadMP3 = async () => {
     if (!data?.music?.playUrl) return
-
     const filename = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
 
     try {
@@ -33,20 +32,18 @@ export default function TikTokPDFGenerator() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ playUrl: data.music.playUrl })
       })
-
-      if (!res.ok) throw new Error('Proxy failed')
+      if (!res.ok) throw new Error()
 
       const blob = await res.blob()
       const blobUrl = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = blobUrl
       a.download = filename
-      document.body.appendChild(a)
       a.click()
       a.remove()
       window.URL.revokeObjectURL(blobUrl)
     } catch (err) {
-      alert('Download failed — try again or use Chrome')
+      alert('Download failed — try Chrome')
     }
   }
 
@@ -67,13 +64,6 @@ export default function TikTokPDFGenerator() {
 
     const qr = await QRCode.toDataURL(data.music.playUrl)
     pdf.addImage(qr, 'PNG', pageWidth / 2 - 40, y, 80, 80)
-    y += 100
-
-    if (data.description) {
-      pdf.setFontSize(14)
-      const lines = pdf.splitTextToSize(data.description, pageWidth - 40)
-      pdf.text(lines, 20, y)
-    }
 
     pdf.save(`${data.music.title?.slice(0, 40) || 'tiktok'}-sound.pdf`)
   }
@@ -97,6 +87,25 @@ export default function TikTokPDFGenerator() {
         {loading ? 'Loading...' : 'Get Sound'}
       </button>
 
+      {/* AUDIO PLAYER — appears right after loading */}
+      {data && data.music.playUrl && (
+        <div style={{ marginTop: '25px', padding: '20px', background: '#f8f9fa', borderRadius: '12px', textAlign: 'center' }}>
+          <audio
+            ref={audioRef}
+            controls
+            controlsList="nodownload"
+            src={data.music.playUrl}
+            style={{ width: '100%', height: '50px', borderRadius: '10px' }}
+          >
+            Your browser does not support audio.
+          </audio>
+          <p style={{ margin: '10px 0 0', fontSize: '14px', color: '#666' }}>
+            Now playing in browser
+          </p>
+        </div>
+      )}
+
+      {/* Download Buttons */}
       {data && (
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
