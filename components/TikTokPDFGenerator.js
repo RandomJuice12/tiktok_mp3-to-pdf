@@ -12,7 +12,7 @@ export default function TikTokPDFGenerator() {
   const fetchData = async () => {
     const tiktokRegex = /(tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)/i
     if (!url.trim() || !tiktokRegex.test(url)) {
-      alert('Please enter a valid TikTok video URL\n\nExample:\nhttps://www.tiktok.com/@username/video/123456789')
+      alert('Please enter a valid TikTok video URL 😊\n\nExample:\nhttps://www.tiktok.com/@username/video/123456789')
       return
     }
 
@@ -21,11 +21,13 @@ export default function TikTokPDFGenerator() {
       const res = await fetch(`/api/tiktok?url=${encodeURIComponent(url)}`)
       const result = await res.json()
 
-      if (result.error || !result.music?.playUrl) {
-        alert('Sorry, that video is private, deleted, or has no sound.\nPlease try a different public TikTok!')
+      // Fix: Set full data (including nested 'data' for video URLs)
+      const fullData = result.data || result
+      if (result.error || !fullData.music?.playUrl) {
+        alert('Sorry, that video is private, deleted, or has no sound.\nPlease try a different public TikTok! 🙏')
         setData(null)
       } else {
-        setData(result)
+        setData(fullData)
       }
     } catch (e) {
       alert('Something went wrong. Please check your link and try again.')
@@ -40,51 +42,51 @@ export default function TikTokPDFGenerator() {
       const res = await fetch('/api/tiktok', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playUrl: data.music.playUrl })
+        body: JSON.stringify({ playUrl: data.music.playUrl, type: 'mp3' })
       })
       if (!res.ok) throw new Error()
       const blob = await res.blob()
-      const url = window.URL.createObjectURL(blob)
+      const blobUrl = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
-      a.href = url
+      a.href = blobUrl
       a.download = filename
       a.click()
-      window.URL.revokeObjectURL(url)
+      a.remove()
+      window.URL.revokeObjectURL(blobUrl)
     } catch (err) {
       alert('MP3 download failed — try Chrome')
     }
   }
 
-  // NEW: MP4 DOWNLOAD FUNCTION
-const downloadMP4 = async () => {
-  // ←←← CORRECT way to get the video URL from tikwm.com API
-  const videoUrl = data?.data?.play || data?.play
-  if (!videoUrl) {
-    alert('No video available for this TikTok (maybe it’s audio-only or private)')
-    return
+  // Fixed MP4 Download (correct field + HD fallback)
+  const downloadMP4 = async () => {
+    // Correct extraction: data.play (SD) or data.hdplay (HD) from tikwm
+    const videoUrl = data?.hdplay || data?.play
+    if (!videoUrl) {
+      alert('No video available for this TikTok (maybe it\'s audio-only or private)')
+      return
+    }
+    const filename = `${data.music?.title?.slice(0, 40) || 'tiktok'}-video.mp4`
+
+    try {
+      const res = await fetch('/api/tiktok', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playUrl: videoUrl, type: 'mp4' })
+      })
+      if (!res.ok) throw new Error()
+      const blob = await res.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = blobUrl
+      a.download = filename
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (err) {
+      alert('MP4 download failed — try again or use Chrome (TikTok sometimes blocks videos)')
+    }
   }
-
-  const filename = `${data.music?.title?.slice(0, 40) || 'tiktok'}-video.mp4`
-
-  try {
-    const res = await fetch('/api/tiktok', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ playUrl: videoUrl })
-    })
-    if (!res.ok) throw new Error()
-
-    const blob = await res.blob()
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    a.click()
-    window.URL.revokeObjectURL(url)
-  } catch (err) {
-    alert('MP4 download failed — try again or use Chrome')
-  }
-}
 
   const generatePDF = async () => {
     if (!data) return
@@ -146,11 +148,10 @@ const downloadMP4 = async () => {
           </p>
 
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={downloadMP3} style={{ padding81: '16px 36px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
+            <button onClick={downloadMP3} style={{ padding: '16px 36px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
               Download MP3
             </button>
 
-            {/* NEW MP4 BUTTON */}
             <button onClick={downloadMP4} style={{ padding: '16px 36px', background: '#2563eb', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer' }}>
               Download MP4
             </button>
