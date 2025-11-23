@@ -11,13 +11,25 @@ export default function TikTokPDFGenerator() {
   const audioRef = useRef(null)
 
   const fetchData = async () => {
+    const tiktokRegex = /(tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)/i
+    if (!url.trim() || !tiktokRegex.test(url)) {
+      alert('Please enter a valid TikTok video URL 😊\n\nExample:\nhttps://www.tiktok.com/@username/video/123456789')
+      return
+    }
+
     setLoading(true)
     try {
       const res = await fetch(`/api/tiktok?url=${encodeURIComponent(url)}`)
       const result = await res.json()
-      setData(result)
+
+      if (result.error || !result.music?.playUrl) {
+        alert('Sorry, that video is private, deleted, or has no sound.\nPlease try a different public TikTok! 🙏')
+        setData(null)
+      } else {
+        setData(result)
+      }
     } catch (e) {
-      alert('Invalid TikTok link — try another one!')
+      alert('Something went wrong. Please check your link and try again.')
     }
     setLoading(false)
   }
