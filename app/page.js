@@ -9,8 +9,8 @@ export default function Home() {
         </h1>
         <p style={{ fontSize: '1.5rem', color: 'white', textAlign: 'center', opacity: 0.95, marginBottom: '48px', lineHeight: '1.5' }}>
           Paste any TikTok link → Get MP3 download <br />
-          ore QR code to the audio in a beautiful PDF <br />
-          Note: If using mobile device, hold down on the tiktok video, find more in dropdown and copy link - Enjoy!!
+          ore QR code to the audio in a beautiful PDF <br /><br />
+          Note: If using mobile device, hold down on the tiktok video, find more in dropdown and copy link <br /> Enjoy!!
         </p>
         <TikTokPDFGenerator />
       </div>
