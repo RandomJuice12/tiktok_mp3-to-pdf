@@ -21,39 +21,34 @@ export default function TikTokPDFGenerator() {
     setLoading(false)
   }
 
-const downloadMP3 = () => {
-  if (!data?.music?.playUrl) return
+  // FIXED MP3 DOWNLOAD — works perfectly on iPhone Safari + Android + Desktop
+  const downloadMP3 = async () => {
+    if (!data?.music?.playUrl) return
 
-  const url = data.music.playUrl
-  const filename = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
+    const filename = `${data.music.title?.slice(0, 50) || 'tiktok-sound'}.mp3`
 
-  if (navigator.userAgent.match(/iPhone|iPad|iPod|Android/i)) {
-    fetch(url)
-      .then(res => res.blob())
-      .then(blob => {
-        const blobUrl = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = blobUrl
-        a.download = filename
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-        window.URL.revokeObjectURL(blobUrl)
+    try {
+      const res = await fetch('/api/tiktok', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playUrl: data.music.playUrl })
       })
-      .catch(() => {
-        const a = document.createElement('a')
-        a.href = url + '?download=1'
-        a.target = '_blank'
-        a.download = filename
-        a.click()
-      })
-  } else {
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    a.click()
+
+      if (!res.ok) throw new Error('Proxy failed')
+
+      const blob = await res.blob()
+      const blobUrl = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = blobUrl
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(blobUrl)
+    } catch (err) {
+      alert('Download failed — try again or use Chrome')
+    }
   }
-}
 
   const generatePDF = async () => {
     if (!data) return
@@ -64,7 +59,6 @@ const downloadMP3 = () => {
     pdf.setFontSize(28)
     pdf.text('TikTok Sound', pageWidth / 2, y, { align: 'center' })
     y += 30
-
     pdf.setFontSize(18)
     pdf.text(data.music.title || 'Unknown Sound', 20, y)
     y += 15
@@ -100,7 +94,7 @@ const downloadMP3 = () => {
         disabled={loading}
         style={{ marginTop: '20px', width: '100%', padding: '18px', background: 'linear-gradient(to right, #a855f7, #ec4899)', color: 'white', fontSize: '22px', fontWeight: 'bold', border: 'none', borderRadius: '12px', cursor: 'pointer' }}
       >
-        {loading ? 'Loading...' : 'Get Sound Info'}
+        {loading ? 'Loading...' : 'Get Sound'}
       </button>
 
       {data && (
@@ -112,38 +106,16 @@ const downloadMP3 = () => {
             by {data.music.author || 'TikTok'}
           </p>
 
-          {/* MP3 DOWNLOAD BUTTON */}
           <button
             onClick={downloadMP3}
-            style={{ 
-              padding: '16px 40px', 
-              background: '#ef4444', 
-              color: 'white', 
-              fontSize: '20px', 
-              fontWeight: 'bold',
-              border: 'none', 
-              borderRadius: '50px', 
-              cursor: 'pointer',
-              margin: '0 10px'
-            }}
+            style={{ padding: '16px 40px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
           >
             Download MP3
           </button>
 
-          {/* PDF DOWNLOAD BUTTON */}
           <button
             onClick={generatePDF}
-            style={{ 
-              padding: '16px 40px', 
-              background: '#10b981', 
-              color: 'white', 
-              fontSize: '20px', 
-              fontWeight: 'bold',
-              border: 'none', 
-              borderRadius: '50px', 
-              cursor: 'pointer',
-              margin: '0 10px'
-            }}
+            style={{ padding: '16px 40px', background: '#10b981', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
           >
             Download PDF + QR
           </button>
