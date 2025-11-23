@@ -76,7 +76,9 @@ export default function TikTokPDFGenerator() {
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && fetchData()}
-        style={{ width: '100%', padding: '16px', fontSize: '18px', border: '3px solid #d8b4fe', borderRadius: '12px', outline: 'none' }}
+        style={{ width: '100%', padding: '16px', fontSize: '18px', border: '2px solid #d1d5db', borderRadius: '12px', outline: 'none', transition: 'border-color 0.2s' }}
+        onFocus={(e) => e.target.style.borderColor = '#6b7280'}
+        onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
       />
       <button
         onClick={fetchData}
