@@ -69,67 +69,122 @@ export default function TikTokPDFGenerator() {
   }
 
   return (
-    <div style={{ background: 'white', borderRadius: '16px', padding: '40px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)', maxWidth: '600px', margin: '0 auto' }}>
-      <input
-        type="text"
-        placeholder="Paste TikTok video link here..."
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && fetchData()}
-        style={{ width: '100%', padding: '16px', fontSize: '18px', border: '3px solid #d8b4fe', borderRadius: '12px', outline: 'none' }}
-      />
+  <div style={{ 
+    background: 'white', 
+    borderRadius: '16px', 
+    padding: '40px', 
+    boxShadow: '0 10px 30px rgba(0,0,0,0.08)', 
+    maxWidth: '600px', 
+    margin: '0 auto',
+    border: '1px solid #e5e7eb'
+  }}>
+    <input
+      type="text"
+      placeholder="Paste TikTok video link here..."
+      value={url}
+      onChange={(e) => setUrl(e.target.value)}
+      onKeyPress={(e) => e.key === 'Enter' && fetchData()}
+      style={{ 
+        width: '100%', 
+        padding: '16px', 
+        fontSize: '18px', 
+        border: '2px solid #d1d5db', 
+        borderRadius: '12px', 
+        outline: 'none',
+        transition: 'border 0.2s'
+      }}
+      onFocus={(e) => e.target.style.border = '2px solid #6b7280'}
+      onBlur={(e) => e.target.style.border = '2px solid #d1d5db'}
+    />
 
-      <button
-        onClick={fetchData}
-        disabled={loading}
-        style={{ marginTop: '20px', width: '100%', padding: '18px', background: 'linear-gradient(to right, #a855f7, #ec4899)', color: 'white', fontSize: '22px', fontWeight: 'bold', border: 'none', borderRadius: '12px', cursor: 'pointer' }}
-      >
-        {loading ? 'Loading...' : 'Get Sound'}
-      </button>
+    <button
+      onClick={fetchData}
+      disabled={loading}
+      style={{ 
+        marginTop: '20px', 
+        width: '100%', 
+        padding: '18px', 
+        background: '#111', 
+        color: 'white', 
+        fontSize: '22px', 
+        fontWeight: 'bold', 
+        border: 'none', 
+        borderRadius: '12px', 
+        cursor: 'pointer',
+        transition: 'background 0.2s'
+      }}
+      onMouseOver={(e) => e.target.style.background = '#333'}
+      onMouseOut={(e) => e.target.style.background = '#111'}
+    >
+      {loading ? 'Loading...' : 'Get Sound'}
+    </button>
 
-      {/* AUDIO PLAYER — appears right after loading */}
-      {data && data.music.playUrl && (
-        <div style={{ marginTop: '25px', padding: '20px', background: '#f8f9fa', borderRadius: '12px', textAlign: 'center' }}>
-          <audio
-            ref={audioRef}
-            controls
-            controlsList="nodownload"
-            src={data.music.playUrl}
-            style={{ width: '100%', height: '50px', borderRadius: '10px' }}
-          >
-            Your browser does not support audio.
-          </audio>
-          <p style={{ margin: '10px 0 0', fontSize: '14px', color: '#666' }}>
-            Now playing in browser
-          </p>
-        </div>
-      )}
+    {/* AUDIO PLAYER */}
+    {data && data.music.playUrl && (
+      <div style={{ marginTop: '25px', padding: '20px', background: '#f9fafb', borderRadius: '12px', border: '1px solid #e5e7eb' }}>
+        <audio
+          ref={audioRef}
+          controls
+          controlsList="nodownload"
+          src={data.music.playUrl}
+          style={{ width: '100%', height: '50px', borderRadius: '8px' }}
+        />
+        <p style={{ margin: '10px 0 0', fontSize: '14px', color: '#666', textAlign: 'center' }}>
+          Now playing in browser
+        </p>
+      </div>
+    )}
 
-      {/* Download Buttons */}
-      {data && (
-        <div style={{ marginTop: '40px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
-            {data.music.title || 'Original Sound'}
-          </h3>
-          <p style={{ color: '#666', margin: '0 0 30px 0' }}>
-            by {data.music.author || 'TikTok'}
-          </p>
+    {/* DOWNLOAD BUTTONS */}
+    {data && (
+      <div style={{ marginTop: '40px', textAlign: 'center' }}>
+        <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 8px 0', color: '#111' }}>
+          {data.music.title || 'Original Sound'}
+        </h3>
+        <p style={{ color: '#666', margin: '0 0 30px 0' }}>
+          by {data.music.author || 'TikTok'}
+        </p>
 
-          <button
-            onClick={downloadMP3}
-            style={{ padding: '16px 40px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
-          >
-            Download MP3
-          </button>
+        <button
+          onClick={downloadMP3}
+          style={{ 
+            padding: '16px 40px', 
+            background: '#1f2937', 
+            color: 'white', 
+            fontSize: '20px', 
+            fontWeight: 'bold', 
+            border: 'none', 
+            borderRadius: '50px', 
+            cursor: 'pointer', 
+            margin: '0 12px',
+            transition: 'all 0.2s'
+          }}
+          onMouseOver={(e) => e.target.style.background = '#111'}
+          onMouseOut={(e) => e.target.style.background = '#1f2937'}
+        >
+          Download MP3
+        </button>
 
-          <button
-            onClick={generatePDF}
-            style={{ padding: '16px 40px', background: '#10b981', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
-          >
-            Download PDF + QR
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
+        <button
+          onClick={generatePDF}
+          style={{ 
+            padding: '16px 40px', 
+            background: '#4b5563', 
+            color: 'white', 
+            fontSize: '20px', 
+            fontWeight: 'bold', 
+            border: 'none', 
+            borderRadius: '50px', 
+            cursor: 'pointer', 
+            margin: '0 12px',
+            transition: 'all 0.2s'
+          }}
+          onMouseOver={(e) => e.target.style.background = '#374151'}
+          onMouseOut={(e) => e.target.style.background = '#4b5563'}
+        >
+          Download PDF + QR
+        </button>
+      </div>
+    )}
+  </div>
+)
