@@ -1,3 +1,4 @@
+// GET = existing metadata fetch (keep your current code)
 export async function GET(request) {
   const { searchParams } = new URL(request.url)
   const url = searchParams.get('url')
@@ -19,6 +20,32 @@ export async function GET(request) {
     }))
   } catch (err) {
     return new Response(JSON.stringify({ error: 'Failed' }), { status: 500 })
+  }
+}
+
+// NEW: POST endpoint = MP3 proxy download (fixes iOS)
+export async function POST(request) {
+  const { playUrl } = await request.json()
+  if (!playUrl) return new Response('No playUrl', { status: 400 })
+
+  try {
+    const response = await fetch(playUrl)
+    if (!response.ok) throw new Error('Failed to fetch audio')
+
+    const arrayBuffer = await response.arrayBuffer()
+    const filename = 'tiktok-sound.mp3'
+
+    return new Response(arrayBuffer, {
+      status: 200,
+      headers: {
+        'Content-Type': 'audio/mpeg',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': arrayBuffer.byteLength.toString(),
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  } catch (err) {
+    return new Response('Download failed', { status: 500 })
   }
 }
 
