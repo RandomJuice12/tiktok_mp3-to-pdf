@@ -1,5 +1,3 @@
-Can you add it into here?:
- 
 'use client'
 import { useState, useRef } from 'react'
 import { jsPDF } from 'jspdf'
