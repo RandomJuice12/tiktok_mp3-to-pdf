@@ -1,9 +1,7 @@
 {
   "cleanUrls": true,
-  "version": 3,
-  "build": {
-    "env": {
-      "FORCE_REBUILD": "20251124-001"
-    }
+  "version": 2,
+  "git": {
+    "force": true
   }
 }
