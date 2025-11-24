@@ -15,11 +15,7 @@ export default function Home() {
         <TikTokPDFGenerator />
 
         {/* Trust & Legal Footer */}
-        <footer style={{ marginTop: '80px', textAlign: 'center', color: '#666', fontSize: '14px', padding: '20px' }}>
-          <p>For personal, non-commercial use only • Respect creators • Made with ❤️ for music lovers</p>
-          <p>© 2025 SaveTikSound.com • <a href="mailto:hello@savetiksound.com" style={{ color: '#666' }}>Contact</a></p>
-        </footer>
-      </div>
-    </main>
-  )
-}
+   <footer style={{ marginTop: '80px', textAlign: 'center', color: '#666', fontSize: '14px', padding: '20px' }}>
+  <p>For personal, non-commercial use only • Made with ❤️ for music</p>
+  <p>© 2025 SaveTikSound.com</p>
+</footer>
