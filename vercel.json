@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
   "version": 2,
-  "git": {
-    "force": true
+  "env": {
+    "CACHE_BUST": "20251124-v5"
   }
 }
