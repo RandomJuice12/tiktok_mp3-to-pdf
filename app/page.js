@@ -13,7 +13,7 @@ export default function Home() {
         </p>
         <TikTokPDFGenerator />
         <footer style={{ marginTop: '80px', textAlign: 'center', color: '#666', fontSize: '14px', padding: '20px' }}>
-          <p>For personal, non-commercial use only • Respect creators • Made with love for music lovers</p>
+          <p>For personal, non-commercial use only • Respect creators • Made for the love of music</p>
           <p>© 2025 SaveTikSound.com</p>
         </footer>
       </div>
