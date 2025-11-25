@@ -6,6 +6,7 @@ export default function RootLayout({ children }) {
       <head>
         {/* === SEO & Google Love === */}
         <title>Free TikTok Sound Downloader 2025 | Save Audio as MP3 No Watermark</title>
+        <meta name="google-site-verification" content="0AIykeDTcpImDzbkbeuoR5L4019LiRN9xyFty5ADwj0" />
         <meta name="description" content="Download any TikTok sound as high-quality MP3 in 2 seconds. No app, no login, no watermark. Works perfectly on iPhone & Android." />
 
         {/* Open Graph – makes your link look pro when shared */}
