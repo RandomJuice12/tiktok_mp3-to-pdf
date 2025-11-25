@@ -109,7 +109,7 @@ export default function TikTokPDFGenerator() {
             <button onClick={downloadMP3} style={{ padding: '16px 40px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', minWidth: '220px', height: '56px' }}>
               Download MP3
             </button>
-            <button onClick={generatePDF} style={{ padding: '16px 40px', background: '#10b981', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', minWidth: '220px', height: '56px' }}>
+            <button onClick={generatePDF} style={{ padding: '16px 40px', background: '#10b981', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '70px', cursor: 'pointer', minWidth: '220px', height: '56px' }}>
               Download PDF + QR
             </button>
           </div>
