@@ -104,28 +104,53 @@ export default function TikTokPDFGenerator() {
         </div>
       )}
       {/* Download Buttons */}
-      {data && (
-        <div style={{ marginTop: '40px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 8px 0' }}>
-            {data.music.title || 'Original Sound'}
-          </h3>
-          <p style={{ color: '#666', margin: '0 0 30px 0' }}>
-            by {data.music.author || 'TikTok'}
-          </p>
-          <button
-            onClick={downloadMP3}
-            style={{ padding: '16px 40px', background: '#ef4444', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
-          >
-            Download MP3
-          </button>
-          <button
-            onClick={generatePDF}
-            style={{ padding: '16px 40px', background: '#10b981', color: 'white', fontSize: '20px', fontWeight: 'bold', border: 'none', borderRadius: '50px', cursor: 'pointer', margin: '0 10px' }}
-          >
-            Download PDF + QR
-          </button>
-        </div>
-      )}
-    </div>
-  )
-}
+{data && (
+  <div style={{ marginTop: '32px', textAlign: 'center' }}>
+    {/* Reduced gap + tighter spacing */}
+    <h3 style={{ fontSize: '26px', fontWeight: 'bold', margin: '0 0 6px 0', color: '#111' }}>
+      {data.music.title || 'Original Sound'}
+    </h3>
+    <p style={{ color: '#666', margin: '0 0 24px 0', fontSize: '16px' }}>
+      by {data.music.author || 'TikTok'}
+    </p>
+
+    {/* Buttons — same height & width, perfect spacing */}
+    <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+      <button
+        onClick={downloadMP3}
+        style={{
+          padding: '16px 40px',
+          background: '#ef4444',
+          color: 'white',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          border: 'none',
+          borderRadius: '50px',
+          cursor: 'pointer',
+          minWidth: '220px',        // ← forces same width
+          height: '56px'            // ← forces same height
+        }}
+      >
+        Download MP3
+      </button>
+
+      <button
+        onClick={generatePDF}
+        style={{
+          padding: '16px 40px',
+          background: '#10b981',
+          color: 'white',
+          fontSize: '20px',
+          fontWeight: 'bold',
+          border: 'none',
+          borderRadius: '50px',
+          cursor: 'pointer',
+          minWidth: '220px',        // ← same as above
+          height: '56px'            // ← same as above
+        }}
+      >
+        Download PDF + QR
+      </button>
+    </div>
+  </div>
+)}
