@@ -15,7 +15,7 @@ export default function TikTokPDFGenerator() {
 
     // === RHETT EASTER EGG ===
     if (input === 'rhett') {
-      alert('Rhett Carter Haubrich from AllThingsMoose (moose emoji)\nThe legend himself')
+      alert('Rhett Carter Haubrich from AllThingsMoose 🫎\nThe legend himself 👑')
       setUrl('')      // clears the box
       return          // stops everything else
     }
