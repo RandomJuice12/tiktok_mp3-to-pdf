@@ -22,7 +22,7 @@ export default function TikTokPDFGenerator() {
 
     const tiktokRegex = /(tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)/i
     if (!url.trim() || !tiktokRegex.test(url)) {
-      alert('Please enter a valid TikTok video URL (smiley face)\n\nExample:\nhttps://www.tiktok.com/@username/video/123456789')
+      alert('Please enter a valid TikTok video URL 😊\n\nExample:\nhttps://www.tiktok.com/@username/video/123456789')
       return
     }
 
@@ -32,7 +32,7 @@ export default function TikTokPDFGenerator() {
       const result = await res.json()
 
       if (result.error || !result.music?.playUrl) {
-        alert('Sorry, that video is private, deleted, or has no sound.\nPlease try a different public TikTok! (prayer hands)')
+        alert('Sorry, that video is private, deleted, or has no sound.\nPlease try a different public TikTok! 🙏')
         setData(null)
       } else {
         setData(result)
